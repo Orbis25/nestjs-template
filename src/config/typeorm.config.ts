@@ -6,13 +6,13 @@ dotenv.config();
 const TypeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
-  entities: ["dist/**/*.entity.js"],
+  entities: ["dist/**/*.entity.{ts,js}"],
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DATABASE,
   port: Number(process.env.POSTGRES_PORT),
   migrationsRun: true,
-  migrations: ['src/migrations/*{.ts,.js}'],
+  migrations: ['dist/migrations/*.js'],
   cli: {
     migrationsDir: 'src/migrations',
   },
