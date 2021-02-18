@@ -1,8 +1,13 @@
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { CorePagination } from '../entities/core-pagination.model';
 
 export interface IRead<T> {
-  getAll(): Promise<T[]>;
+  getAll(
+    qyt?: number,
+    page?: number,
+    isAll?: boolean,
+  ): Promise<CorePagination<T>>;
   getById(id: string): Promise<T>;
 }
 

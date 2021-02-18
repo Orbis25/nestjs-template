@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import CoreRepository from '../repositories/Core.repository';
+import { CorePagination } from '../entities/core-pagination.model';
 
 export default class CoreService<T> {
   private repository: CoreRepository<T>;
@@ -32,9 +33,9 @@ export default class CoreService<T> {
     }
   }
 
-  async getAll(): Promise<T[]> {
+  async getAll(qyt = 10, page = 1, isAll = false): Promise<CorePagination<T>> {
     try {
-      return await this.repository.getAll();
+      return await this.repository.getAll(qyt, page, isAll);
     } catch (error) {
       throw new BadRequestException(HttpStatus.BAD_REQUEST, error);
     }
