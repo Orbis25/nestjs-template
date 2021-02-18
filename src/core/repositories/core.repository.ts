@@ -1,4 +1,4 @@
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, getManager, Repository, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import ICoreRepository from './ICore.repository';
 import { CorePagination } from '../entities/core-pagination.model';
@@ -7,18 +7,36 @@ export default abstract class CoreRepository<T>
   extends Repository<T>
   implements ICoreRepository<T> {
   async removeEntity(id: string): Promise<DeleteResult> {
-    return await this.delete(id);
+    let index = await this.findOne(id);
+    if (index) {
+      return await this.delete(index)
+    }
+    // TODO : remove return await this.delete(id);
   }
 
   async add(model: T): Promise<T> {
     return await this.save(model);
   }
+  /**
+   * Feature : update the entity with the given model and update (id)
+   * @param id 
+   * @param model 
+   * @returns {any}
+   */
 
   async modify(
     id: string,
     model: QueryDeepPartialEntity<T>,
-  ): Promise<UpdateResult> {
-    return await this.update(id, model);
+  ): Promise<any> {
+    let index = await this.findOne(id);
+    if (index){
+      Object.assign(index, model);
+      await getManager().transaction(async transactionalEntityManager =>{
+        await transactionalEntityManager.save(index);
+      })
+      return index;
+    }
+    //return await this.update(id, model);
   }
 
   async getAll(qyt = 10, page = 1, isAll = false): Promise<CorePagination<T>> {
