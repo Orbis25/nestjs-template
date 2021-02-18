@@ -11,7 +11,7 @@ export default abstract class CoreRepository<T>
     if (index) {
       return await this.delete(index)
     }
-    // TODO : remove return await this.delete(id);
+   
   }
 
   async add(model: T): Promise<T> {
