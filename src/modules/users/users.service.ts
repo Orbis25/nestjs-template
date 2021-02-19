@@ -7,7 +7,7 @@ import CoreService from 'src/core/services/Core.service';
 @Injectable()
 export class UsersService extends CoreService<UserEntity> {
   constructor(
-    @InjectRepository(UserRepository)
+    @InjectRepository(UserRepository,'default')
     private readonly userRepository: UserRepository,
   ) {
     super(userRepository);
